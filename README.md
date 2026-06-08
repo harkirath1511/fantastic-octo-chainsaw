@@ -1,7 +1,5 @@
 # TaskFlow — REST API with Auth & Role-Based Access
 
-A full-stack task management app built with Node.js, PostgreSQL (Supabase), and React.
-
 ---
 
 ## Stack
