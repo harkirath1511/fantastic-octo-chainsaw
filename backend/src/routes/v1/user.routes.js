@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { getAllUsers } = require('../../controllers/user.controller');
+const { getAllUsers, makeUserAdmin } = require('../../controllers/user.controller');
 const { authenticate, authorize } = require('../../middleware/auth');
 
 /**
@@ -22,5 +22,27 @@ const { authenticate, authorize } = require('../../middleware/auth');
  *         description: Forbidden
  */
 router.get('/', authenticate, authorize('admin'), getAllUsers);
+
+/**
+ * @swagger
+ * /users/{id}/make-admin:
+ *   patch:
+ *     summary: Promote a user to admin (admin only)
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: User promoted to admin
+ *       404:
+ *         description: User not found
+ *       409:
+ *         description: User is already an admin
+ */
+router.patch('/:id/make-admin', authenticate, authorize('admin'), makeUserAdmin);
 
 module.exports = router;

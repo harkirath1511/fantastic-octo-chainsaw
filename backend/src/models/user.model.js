@@ -33,6 +33,14 @@ const UserModel = {
     );
     return rows;
   },
+
+  async updateRole(id) {
+    const { rows } = await pool.query(
+      `UPDATE users SET role = 'admin' WHERE id = $1 RETURNING id, name, email, role`,
+      [id]
+    );
+    return rows[0] || null;
+  },
 };
 
 module.exports = UserModel;
