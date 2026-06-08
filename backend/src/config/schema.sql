@@ -1,4 +1,3 @@
--- Run this once to set up the database
 
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
