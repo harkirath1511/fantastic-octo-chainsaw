@@ -6,6 +6,7 @@ const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
 const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('./config/swagger');
+const { apiLimiter } = require('./middleware/rateLimit');
 
 const app = express();
 
@@ -17,6 +18,7 @@ app.use(cors({
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(cookieParser());
+app.use('/api/', apiLimiter);
 
 // API docs
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));

@@ -3,6 +3,8 @@ const { register, login, me, logout } = require('../../controllers/auth.controll
 const { authenticate } = require('../../middleware/auth');
 const { registerRules, loginRules } = require('../../validators/auth.validator');
 const validate = require('../../middleware/validate');
+const { authLimiter } = require('../../middleware/rateLimit');
+const { cache } = require('../../middleware/cache');
 
 /**
  * @swagger
@@ -42,7 +44,7 @@ const validate = require('../../middleware/validate');
  *       409:
  *         description: Email already in use
  */
-router.post('/register', registerRules, register);
+router.post('/register', authLimiter, registerRules, register);
 
 /**
  * @swagger
@@ -69,7 +71,7 @@ router.post('/register', registerRules, register);
  *       401:
  *         description: Invalid credentials
  */
-router.post('/login', loginRules, validate, login);
+router.post('/login', authLimiter, loginRules, validate, login);
 
 /**
  * @swagger
@@ -83,7 +85,7 @@ router.post('/login', loginRules, validate, login);
  *       401:
  *         description: Unauthorized
  */
-router.get('/me', authenticate, me);
+router.get('/me', authenticate, cache(300), me);
 
 /**
  * @swagger

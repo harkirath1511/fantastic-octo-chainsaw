@@ -1,5 +1,6 @@
 const TaskModel = require('../models/task.model');
 const { success, error } = require('../utils/response');
+const { bustUserCache } = require('../middleware/cache');
 
 const createTask = async (req, res) => {
   try {
@@ -12,6 +13,7 @@ const createTask = async (req, res) => {
       priority,
       dueDate: due_date,
     });
+    await bustUserCache(req.user.id);
     return success(res, { task }, 201);
   } catch (err) {
     console.error(err);
@@ -79,6 +81,7 @@ const updateTask = async (req, res) => {
       dueDate: due_date,
     });
 
+    await bustUserCache(req.user.id);
     return success(res, { task: updated });
   } catch (err) {
     console.error(err);
@@ -96,6 +99,7 @@ const deleteTask = async (req, res) => {
     }
 
     await TaskModel.delete(req.params.id);
+    await bustUserCache(req.user.id);
     return success(res, { message: 'Task deleted' });
   } catch (err) {
     console.error(err);

@@ -3,6 +3,7 @@ const { createTask, getTasks, getTask, updateTask, deleteTask } = require('../..
 const { authenticate } = require('../../middleware/auth');
 const { createTaskRules, updateTaskRules, listTaskRules } = require('../../validators/task.validator');
 const validate = require('../../middleware/validate');
+const { cache } = require('../../middleware/cache');
 
 /**
  * @swagger
@@ -40,7 +41,7 @@ const validate = require('../../middleware/validate');
  *       200:
  *         description: List of tasks with pagination info
  */
-router.get('/', authenticate, listTaskRules, validate, getTasks);
+router.get('/', authenticate, listTaskRules, validate, cache(30), getTasks);
 
 /**
  * @swagger
